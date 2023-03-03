@@ -104,7 +104,8 @@ venv/
 ENV/
 env.bak/
 venv.bak/
-
+settings/
+.gitignore/
 # mkdocs documentation
 /site
 
