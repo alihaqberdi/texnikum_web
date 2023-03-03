@@ -5,7 +5,7 @@ admin.site.register(PersonalInfo)
 
 @admin.register(Nurse)
 class Nurse(admin.ModelAdmin):
-    list_display = ['personal_info', 'patsient']
+    list_display = ['name', 'patsient']
     # list_filter = ['in_stock', 'is_active']
 
 
