@@ -18,4 +18,4 @@ def NewsView(request):
     return render(request, 'news.html')
 
 def ServiceView(request):
-    return render(request, 'service.html')
+    return render(request, 'services.html')
