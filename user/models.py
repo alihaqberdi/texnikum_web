@@ -35,14 +35,66 @@ class CustomAccountManager(BaseUserManager):
         user.save()
         return user
 
-class PersonalInfo(models.Model):
+# class PersonalInfo(models.Model):
+#     email = models.EmailField(_('email address'), unique=True)
+#     name = models.CharField(max_length=150)
+#     mobile = models.CharField(max_length=150, blank=True)
+#     images = models.ImageField(null=True, blank=True, upload_to='media')
+#     # Address
+#     city = models.CharField(max_length=50, verbose_name="Qaysi shaharda yashaysiz?",help_text="Hozirda yashaydigan mazilingizni ko'rsating")
+#     street = models.CharField(max_length=50, verbose_name="Qaysi mahallada yashaysiz?", help_text="Hozirda yashaydigan mahalla yoki ko'changiz nomini kiriting")
+#
+#     # User Status
+#     is_active = models.BooleanField(default=False)
+#     is_staff = models.BooleanField(default=False)
+#     created = models.DateTimeField(auto_now_add=True)
+#     updated = models.DateTimeField(auto_now=True)
+#
+#     objects = CustomAccountManager()
+#
+#
+#
+#     class Meta:
+#         verbose_name = "Accounts"
+#         verbose_name_plural = "Accounts"
+
+
+class Patsient(models.Model):
     email = models.EmailField(_('email address'), unique=True)
     name = models.CharField(max_length=150)
     mobile = models.CharField(max_length=150, blank=True)
     images = models.ImageField(null=True, blank=True, upload_to='media')
+    password = models.CharField(max_length=50, null=False,blank=False)
     # Address
-    city = models.CharField(max_length=50, verbose_name="Qaysi shaharda yashaysiz?",help_text="Hozirda yashaydigan mazilingizni ko'rsating")
-    street = models.CharField(max_length=50, verbose_name="Qaysi mahallada yashaysiz?", help_text="Hozirda yashaydigan mahalla yoki ko'changiz nomini kiriting")
+    city = models.CharField(max_length=50, null=True, blank=True, verbose_name="Qaysi shaharda yashaysiz?",
+                            help_text="Hozirda yashaydigan mazilingizni ko'rsating")
+    street = models.CharField(max_length=50, null=True, blank=True, verbose_name="Qaysi mahallada yashaysiz?",
+                              help_text="Hozirda yashaydigan mahalla yoki ko'changiz nomini kiriting")
+
+    # User Status
+    is_active = models.BooleanField(default=False)
+    is_staff = models.BooleanField(default=False)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    objects = CustomAccountManager()
+    message = models.TextField(null=True,blank=True)
+
+    def __str__(self):
+        return self.name
+
+class Nurse(models.Model):
+    email = models.EmailField(_('email address'), unique=True)
+    name = models.CharField(max_length=150)
+    mobile = models.CharField(max_length=150, blank=True)
+    images = models.ImageField(null=True, blank=True, upload_to='media')
+    password = models.CharField(max_length=50, null=False,blank=False)
+
+    # Address
+    city = models.CharField(max_length=50, null=True, blank=True, verbose_name="Qaysi shaharda yashaysiz?",
+                            help_text="Hozirda yashaydigan mazilingizni ko'rsating")
+    street = models.CharField(max_length=50, null=True, blank=True, verbose_name="Qaysi mahallada yashaysiz?",
+                              help_text="Hozirda yashaydigan mahalla yoki ko'changiz nomini kiriting")
 
     # User Status
     is_active = models.BooleanField(default=False)
@@ -52,54 +104,91 @@ class PersonalInfo(models.Model):
 
     objects = CustomAccountManager()
 
-
-
-    class Meta:
-        verbose_name = "Accounts"
-        verbose_name_plural = "Accounts"
-
-
-class Patsient(models.Model):
-    personal_info = models.ForeignKey(PersonalInfo, on_delete=models.CASCADE, blank=True, null=True)
-    message = models.TextField(null=True,blank=True)
+    patsient = models.ForeignKey(Patsient, on_delete=models.SET_NULL, blank=True, null=True)
+    message = models.TextField(null=True, blank=True)
 
     def __str__(self):
         return self.name
 
-class Nurse(models.Model):
-    personal_info = models.ForeignKey(PersonalInfo, on_delete=models.CASCADE, blank=True)
-    patsient = models.ForeignKey(Patsient, on_delete=models.CASCADE, blank=True, null=True)
-    message = models.TextField(null=True, blank=True)
-
-    def __str__(self):
-        return self.personal_info.name
-
 
 class Doctor(models.Model):
-    personal_info = models.ForeignKey(PersonalInfo, on_delete=models.CASCADE, blank=True, null=True)
+    email = models.EmailField(_('email address'), unique=True)
+    name = models.CharField(max_length=150)
+    mobile = models.CharField(max_length=150, blank=True)
+    images = models.ImageField(null=True, blank=True, upload_to='media')
+    password = models.CharField(max_length=50, null=False,blank=False)
+
+    # Address
+    city = models.CharField(max_length=50, null=True, blank=True, verbose_name="Qaysi shaharda yashaysiz?",
+                            help_text="Hozirda yashaydigan mazilingizni ko'rsating")
+    street = models.CharField(max_length=50, null=True, blank=True, verbose_name="Qaysi mahallada yashaysiz?",
+                              help_text="Hozirda yashaydigan mahalla yoki ko'changiz nomini kiriting")
+    # User Status
+    is_active = models.BooleanField(default=False)
+    is_staff = models.BooleanField(default=False)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    objects = CustomAccountManager()
     nurse = models.ForeignKey(Nurse, on_delete=models.CASCADE, blank=True, null=True)
-    patsient = models.ForeignKey(Patsient, on_delete=models.CASCADE, blank=True, null=True)
+    patsient = models.ForeignKey(Patsient, on_delete=models.RESTRICT, blank=True, null=True)
     message = models.TextField(null=True, blank=True)
     def __str__(self):
-        return self.personal_info.name
+        return self.name
 
 
 class SeniorDoctor(models.Model):
-    personal_info = models.ForeignKey(PersonalInfo, on_delete=models.CASCADE, blank=True, null=True)
-    doctor = models.ForeignKey(Doctor,on_delete=models.CASCADE, blank=True, null=True)
-    nurse = models.ForeignKey(Nurse, on_delete=models.CASCADE,blank=True, null=True)
-    patsient = models.ForeignKey(Patsient, on_delete=models.CASCADE, blank=True, null=True)
+    email = models.EmailField(_('email address'), unique=True)
+    name = models.CharField(max_length=150)
+    mobile = models.CharField(max_length=150, blank=True)
+    images = models.ImageField(null=True, blank=True, upload_to='media')
+    password = models.CharField(max_length=50, null=False, blank=False)
+
+    # Address
+    city = models.CharField(max_length=50, null=True, blank=True, verbose_name="Qaysi shaharda yashaysiz?",
+                            help_text="Hozirda yashaydigan mazilingizni ko'rsating")
+    street = models.CharField(max_length=50, null=True, blank=True, verbose_name="Qaysi mahallada yashaysiz?",
+                              help_text="Hozirda yashaydigan mahalla yoki ko'changiz nomini kiriting")
+    # User Status
+    is_active = models.BooleanField(default=False)
+    is_staff = models.BooleanField(default=False)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    doctor = models.ForeignKey(Doctor, on_delete=models.SET_NULL, blank=True, null=True)
+    nurse = models.ForeignKey(Nurse,  on_delete=models.SET_NULL,blank=True, null=True)
+    patsient = models.ForeignKey(Patsient,  on_delete=models.SET_NULL, blank=True, null=True)
     message = models.TextField(null=True, blank=True)
+
     def __str__(self):
-        return self.personal_info.name
+        return self.name
 
 
 class Admin(models.Model):
-    senior_doctor = models.ForeignKey(SeniorDoctor, on_delete=models.CASCADE, blank=True, null=True)
-    doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE, blank=True, null=True)
-    nurse = models.ForeignKey(Nurse, on_delete=models.CASCADE, blank=True, null=True)
+    email = models.EmailField(_('email address'), unique=True)
+    name = models.CharField(max_length=150)
+    mobile = models.CharField(max_length=150, blank=True)
+    images = models.ImageField(null=True, blank=True, upload_to='media')
+    password = models.CharField(max_length=50, null=False,blank=False)
+
+    # Address
+    city = models.CharField(max_length=50, null=True, blank=True, verbose_name="Qaysi shaharda yashaysiz?",
+                            help_text="Hozirda yashaydigan mazilingizni ko'rsating")
+    street = models.CharField(max_length=50, null=True, blank=True, verbose_name="Qaysi mahallada yashaysiz?",
+                              help_text="Hozirda yashaydigan mahalla yoki ko'changiz nomini kiriting")
+    # User Status
+    is_active = models.BooleanField(default=False)
+    is_staff = models.BooleanField(default=False)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    objects = CustomAccountManager()
+    senior_doctor = models.ForeignKey(SeniorDoctor,  on_delete=models.SET_NULL, blank=True, null=True)
+    doctor = models.ForeignKey(Doctor,  on_delete=models.SET_NULL, blank=True, null=True)
+    nurse = models.ForeignKey(Nurse,  on_delete=models.SET_NULL, blank=True, null=True)
     message = models.TextField(null=True, blank=True)
 
     def __str__(self):
         name = "Admin"
         return name
+
