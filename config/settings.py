@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-0hirinf&ma6_87yi^qfn=8og4&16u8g-0#zz+&9(wd^vwx^047
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['yourdomain.com', '127.0.0.1', 'localhost']
 
 
 # Application definition
@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'user',
-    'home'
+    'home',
+    'six'
 ]
 
 MIDDLEWARE = [
@@ -143,4 +144,8 @@ MEDIA_ROOT = [os.path.join(BASE_DIR, 'media')]
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+
+LOGIN_URL = '/user/login/'
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
