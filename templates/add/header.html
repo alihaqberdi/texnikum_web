@@ -31,6 +31,11 @@
                                   <li><a href="{% url 'home:service' %}">Services</a></li>
                                   <li><a href="{% url 'home:news' %}">News</a></li>
                                   <li><a href="{% url 'home:contact' %}">Contact</a></li>
+                                  {% if user.is_authenticated %}
+                                  <h1>MESSAGE</h1>
+                                  <li><a href="{% url 'user:chat_room' user.username %}">Message</a></li><br>
+
+                                  {% endif %}
                               </ul>
                           </nav>
                           <div class="hamburger ml-auto"><i class="fa fa-bars" aria-hidden="true"></i></div>

@@ -1,0 +1,4 @@
+django 
+jazzmin
+pillow
+psycopg2
