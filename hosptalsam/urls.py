@@ -20,6 +20,8 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path('', include('home.urls')),
     path('user', include('user.urls')),
+    path('chat/', include('message.urls')),
+    
 
 ]
 admin.site.index_title = "Clinika start up"

@@ -82,15 +82,4 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 
 
-class Chat(models.Model):
-    user1 = models.OneToOneField(User, on_delete=models.CASCADE, related_name='User1Chat')
-    user2 = models.OneToOneField(User, on_delete=models.CASCADE, related_name='User2Chat')
-
-
-class Message(models.Model):
-    suhbatdosh1 = models.ForeignKey(User, on_delete=models.CASCADE,related_name='suhbatdosh1_messages')
-    suhbatdosh2 = models.ForeignKey(User, on_delete=models.CASCADE,related_name='suhbatdosh2_messages')
-    chat = models.ForeignKey(Chat, on_delete= models.CASCADE, related_name='chat_messages')
-    text = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
 
