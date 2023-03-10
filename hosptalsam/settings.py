@@ -25,12 +25,14 @@ SECRET_KEY = "django-insecure-h^5ze+=k^r$$zcqkm1e#!#16cg-rzexr($m9&e8wl_jlw^jejz
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['127.0.0.1']
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'channels',
+    "daphne",
     "jazzmin",
     "django.contrib.admin",
     "django.contrib.auth",
@@ -42,8 +44,7 @@ INSTALLED_APPS = [
     "service",
     'home',
     'message',
-    'channels',  
-    # bu django modeli real vaqt rejimida mijoz va server bilan aloqani ta'minlaydigan WebSocketni boshqarish uchun kerak 
+
 ]
 
 MIDDLEWARE = [
@@ -75,7 +76,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "hosptalsam.wsgi.application"
-
+ASGI_APPLICATION = "hosptalsam.asgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
@@ -127,6 +128,25 @@ STATIC_ROOT = os.path.join('static')
 
 
 ASGI_APPLICATION = "hosptalsam.routing.application"
+os.environ['REDIS_URL'] = 'redis://127.0.0.1:6379'
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [os.environ['REDIS_URL']],
+        },
+    },
+}
+
+# CACHES = {
+#     "default": {
+#         "BACKEND": "django_redis.cache.RedisCache",
+#         "LOCATION": os.environ['REDIS_URL'],
+#         "OPTIONS": {
+#             "CLIENT_CLASS": "django_redis.client.DefaultClient"
+#         }
+#     }
+# }
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
